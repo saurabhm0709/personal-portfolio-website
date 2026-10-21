@@ -15,19 +15,19 @@ export type TimelineEntry = {
 export const education: TimelineEntry[] = [
   {
     title: "M.Tech, Mathematics & Computing",
-    organisation: "[ADD INSTITUTION]",
-    period: "[ADD START YEAR] – [ADD EXPECTED GRADUATION]",
+    organisation: "National Institute of Technology, Jalandhar",
+    period: " August, 2025 – July, 2027",
     points: [
       "Thesis: Application-Aware Proactive Scheduling in the Edge-Cloud Continuum.",
-      "Relevant coursework: [ADD COURSES]",
+      "Relevant coursework: Machine Learning,Linear Algebra, Probability and Statistics, Sampling Distribution and Estimation Theory, Convex Optimization",
     ],
   },
-  {
-    title: "Bachelor's degree, Computer Science",
-    organisation: "[ADD INSTITUTION]",
-    period: "[ADD START YEAR] – [ADD END YEAR]",
-    points: ["[ADD DEGREE NAME, e.g. B.Tech / B.E. / B.Sc.]", "[ADD NOTABLE COURSEWORK OR PROJECTS]"],
-  },
+  // {
+  //   title: "B.Tech, Computer Science and Engineering",
+  //   organisation: "Babu Banarasi Das National Institute of Technology and Management",
+  //   period: "August, 2018 – July, 2022",
+  //   points: ["[ADD DEGREE NAME, e.g. B.Tech / B.E. / B.Sc.]", "[ADD NOTABLE COURSEWORK OR PROJECTS]"],
+  // },
 ];
 
 export const experience: TimelineEntry[] = [
