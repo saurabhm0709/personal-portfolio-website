@@ -11,7 +11,7 @@ export function isPlaceholder(value: string | undefined | null): boolean {
 }
 
 export const site = {
-  name: "Saurabh",
+  name: "Saurabh Mishra",
   // Shown in the hero and used in page titles / SEO.
   headline: "M.Tech Mathematics & Computing · Data Science & Machine Learning",
   shortTitle: "Data Science & ML",
@@ -19,24 +19,24 @@ export const site = {
     "Saurabh is an M.Tech student in Mathematics and Computing working on machine learning, statistics and time-series prediction, with research on proactive scheduling in the edge-cloud continuum.",
 
   // Public URL of the deployed site, used for sitemap and social previews.
-  // [ADD SITE URL] after deploying to Vercel. Setting NEXT_PUBLIC_SITE_URL in Vercel also works.
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.vercel.app",
+  // NEXT_PUBLIC_SITE_URL in Vercel overrides this (e.g. after adding a custom domain).
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://saurabhm.vercel.app",
 
-  location: "[ADD CITY, COUNTRY]",
-  email: "[ADD EMAIL]",
+  location: "Dehradun, India",
+  email: "saurabhmishra0619@gmail.com",
 
   links: {
-    github: "[ADD GITHUB URL]",
-    linkedin: "[ADD LINKEDIN URL]",
+    github: "https://github.com/saurabhm0709",
+    linkedin: "https://www.linkedin.com/in/saurabhmishra0709/",
     // Put your resume at public/resume.pdf and set this to "/resume.pdf".
     resumePdf: "[ADD RESUME]",
   },
 
   education: {
     current: "M.Tech, Mathematics & Computing",
-    currentInstitution: "[ADD INSTITUTION]",
-    previous: "Bachelor's degree, Computer Science",
-    previousInstitution: "[ADD INSTITUTION]",
+    currentInstitution: "National Institute of Technology, Jalandhar, Punjab, India",
+    previous: "B.Tech, Computer Science and Engineering",
+    previousInstitution: "BBDNITM, Lucknow, India",
   },
 };
 
