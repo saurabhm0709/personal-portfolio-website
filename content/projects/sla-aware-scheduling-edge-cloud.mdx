@@ -1,0 +1,85 @@
+{/*
+  Project write-up for the M.Tech research. The /research page gives the
+  higher-level research overview; this page is the engineering/experiment log.
+  Replace every <Placeholder> with real details as the work progresses.
+*/}
+
+<Callout title="Ongoing M.Tech research">
+  This project is in progress. The sections below describe the problem and approach; experimental results
+  will be added once they are final. For a higher-level overview, see the [research page](/research).
+</Callout>
+
+## Problem
+
+In the edge-cloud continuum, applications run on a mix of resource-constrained edge nodes and larger cloud resources. Their behaviour (load, resource usage, latency) changes over time. When a scheduler only reacts once a service-level agreement (SLA) has already been violated, the violation has already happened by the time any corrective action takes effect.
+
+**Question:** can predicting application behaviour ahead of time let a scheduler act _before_ SLA violations occur, and does that measurably reduce them compared to a reactive approach?
+
+## Motivation
+
+<Placeholder>ADD WHY THIS PROBLEM MATTERS TO YOU / YOUR LAB, AND THE GAP IN EXISTING APPROACHES</Placeholder>
+
+## System
+
+Experiments run on **iContinuum**, an emulator for the edge-cloud continuum.
+
+<Placeholder>ADD DESCRIPTION OF THE EMULATED TOPOLOGY, APPLICATIONS AND WHAT IS MONITORED</Placeholder>
+
+<FigurePlaceholder label="ADD SYSTEM ARCHITECTURE DIAGRAM" caption="System architecture: emulated infrastructure, monitoring, predictor and scheduler." />
+
+## Methodology
+
+<Pipeline
+  steps={[
+    { title: "Monitor", detail: "Application behaviour" },
+    { title: "Predict", detail: "Time-series model" },
+    { title: "Decide", detail: "SLA risk ahead?" },
+    { title: "Schedule", detail: "Act proactively" },
+    { title: "Evaluate", detail: "vs. reactive" },
+  ]}
+  caption="Conceptual loop of the proactive approach."
+/>
+
+<Placeholder>ADD METHODOLOGY DETAILS: data collected, sampling interval, prediction horizon, decision rule</Placeholder>
+
+## Prediction
+
+Application behaviour is modelled as a time series. Two families of models are being explored:
+
+- **ARIMA**: a classical statistical model; interpretable and cheap to fit, suited to series with linear structure.
+- **LSTM**: a recurrent neural network that can capture non-linear temporal patterns, at the cost of more data and tuning.
+
+<Placeholder>ADD WHICH SIGNALS ARE FORECAST, FEATURES, HORIZON AND HOW MODELS ARE TRAINED/VALIDATED</Placeholder>
+
+<Metrics
+  items={[
+    { label: "ARIMA error", value: "[ADD FORECAST ERROR]" },
+    { label: "LSTM error", value: "[ADD FORECAST ERROR]" },
+    { label: "Horizon", value: "[ADD HORIZON]" },
+    { label: "Metric", value: "[ADD e.g. MAE / RMSE]" },
+  ]}
+/>
+
+## Scheduling
+
+<Placeholder>ADD THE SCHEDULING STRATEGY: what actions the scheduler can take and how predictions trigger them</Placeholder>
+
+| Approach  | When it acts                                | Information used                    |
+| --------- | ------------------------------------------- | ----------------------------------- |
+| Reactive  | After an SLA violation is detected          | Current measurements                |
+| Proactive | When a violation is predicted ahead of time | Forecast of application behaviour   |
+
+## Experiments
+
+<Placeholder>ADD EXPERIMENTAL SETUP: scenarios, workloads, number of runs, baselines</Placeholder>
+
+## Results
+
+<Placeholder>ADD RESULTS ONCE FINAL. Do not publish preliminary numbers without labelling them.</Placeholder>
+
+<FigurePlaceholder label="ADD SLA VIOLATIONS: REACTIVE VS PROACTIVE" caption="SLA violations under reactive and proactive scheduling." />
+
+## Future Work
+
+- <Placeholder>ADD FUTURE DIRECTION</Placeholder>
+- <Placeholder>ADD FUTURE DIRECTION</Placeholder>

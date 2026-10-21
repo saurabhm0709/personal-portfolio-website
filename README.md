@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Saurabh: personal portfolio
 
-## Getting Started
+Next.js (App Router) · TypeScript · Tailwind CSS v4 · shadcn/ui · MDX · Motion. No database: all content lives in files.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install        # once
+npm run dev        # http://localhost:3000, reloads on save
+npm run lint       # code-style checks
+npm run build      # production build (also type-checks); run before deploying
+npm run start      # serve the production build locally
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+app/                    Pages. Folder name = URL.
+  page.tsx              /            (home)
+  about/page.tsx        /about
+  projects/page.tsx     /projects
+  projects/[slug]/      /projects/<slug>   one template for every project
+  research/page.tsx     /research
+  experience/page.tsx   /experience
+  blog/page.tsx         /blog
+  blog/[slug]/          /blog/<slug>       one template for every post
+  contact/, resume/     /contact, /resume
+  layout.tsx            Wraps every page: fonts, header, footer, theme, default SEO
+  globals.css           Colours (light + dark), long-form text styles
+  sitemap.ts, robots.ts, icon.svg, opengraph-image.tsx   SEO files
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+data/                   ← Edit these to change site content
+  site.ts               Name, links, email, nav, "Currently" list
+  projects.ts           Project cards + metadata
+  skills.ts             Skills and honest levels
+  experience.ts         Education & experience timeline
+  research.ts           Research facts and publications
+  notes.ts              Planned blog topics
 
-## Learn More
+content/                ← Long-form writing (MDX = Markdown + components)
+  projects/<slug>.mdx   Project write-ups
+  blog/<slug>.mdx       Blog posts
 
-To learn more about Next.js, take a look at the following resources:
+components/             Reusable UI pieces (header, cards, diagrams, ...)
+lib/                    Helpers that read the content folder
+public/                 Static files served as-is (put resume.pdf and images here)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Common tasks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Replace placeholders.** Search the project for `[ADD` (and `[REVIEW`). Every missing fact is marked that way and shows up amber/dashed on the site.
 
-## Deploy on Vercel
+**Add your resume.** Save it as `public/resume.pdf`, then in `data/site.ts` set `resumePdf: "/resume.pdf"`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Add a project.**
+1. Add an entry to `data/projects.ts`.
+2. Create `content/projects/<same-slug>.mdx` (copy an existing one as a template).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Add a blog post.** Create `content/blog/<slug>.mdx` starting with:
+
+```js
+export const meta = {
+  title: "Bias-Variance Tradeoff",
+  description: "One-sentence summary.",
+  date: "2026-11-02",
+  tags: ["Machine Learning"],
+  status: "published", // "draft" = only visible in `npm run dev`
+};
+```
+
+Math works with `$inline$` and `$$block$$` (KaTeX). Code blocks get syntax highlighting.
+
+**Add a figure.** Save the image to `public/images/...`, then in an MDX file:
+
+```mdx
+<Figure src="/images/house/residuals.png" alt="Residuals vs predicted price" width={1200} height={700} caption="..." />
+```
+
+Components usable in any MDX file without importing: `Figure`, `FigurePlaceholder`, `Placeholder`, `Metrics`, `Pipeline`, `Callout` (see `components/content-blocks.tsx`).
+
+**Update "Currently".** Edit `now` and `nowUpdated` in `data/site.ts`.
+
+## Deploy (Vercel)
+
+1. Push this repo to GitHub.
+2. On vercel.com → *Add New Project* → import the repo → Deploy (no settings needed).
+3. Set the environment variable `NEXT_PUBLIC_SITE_URL` to your final URL (e.g. `https://saurabh.vercel.app`) and redeploy, so the sitemap and social previews use the right domain.

@@ -1,0 +1,93 @@
+export const meta = {
+  title: "Central Limit Theorem: Intuition Through Simulation",
+  description:
+    "Watching the standardised mean of a skewed distribution become normal, and measuring how fast it happens.",
+  date: "2026-10-04",
+  tags: ["Probability", "Statistics", "Python"],
+  status: "example",
+};
+
+{/*
+  EXAMPLE POST. It demonstrates the blog's formatting (math, code, tables, callouts).
+  The maths and the simulation output are real (the output below was produced
+  by running the code). Rewrite it in your own words and set status to
+  "published", or delete this file.
+*/}
+
+The Central Limit Theorem (CLT) is usually stated in one line and then used everywhere: confidence intervals, A/B tests, standard errors of regression coefficients. This note builds intuition for it by simulation, and then asks a question the one-line statement ignores: **how large does $n$ need to be?**
+
+## The statement
+
+Let $X_1, X_2, \dots$ be i.i.d. random variables with mean $\mu$ and finite variance $\sigma^2$, and let $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$. Then
+
+$$
+Z_n = \frac{\sqrt{n}\,(\bar{X}_n - \mu)}{\sigma} \xrightarrow{\;d\;} \mathcal{N}(0, 1) \quad \text{as } n \to \infty.
+$$
+
+Nothing is assumed about the _shape_ of the distribution of $X_i$, only that its variance is finite.
+
+## A skewed starting point
+
+To make the effect visible, start from a distribution that looks nothing like a normal: the exponential distribution with rate 1, which has $\mu = 1$, $\sigma = 1$ and skewness $2$.
+
+For each sample size $n$, the code below draws 100,000 independent samples of size $n$, computes $Z_n$ for each, and checks the first three moments. For a standard normal they would be $0$, $1$ and $0$.
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(seed=0)
+mu, sigma = 1.0, 1.0          # mean and std of Exponential(1)
+reps = 100_000
+
+for n in [1, 5, 30, 100]:
+    samples = rng.exponential(scale=1.0, size=(reps, n))
+    z = np.sqrt(n) * (samples.mean(axis=1) - mu) / sigma
+    skew = np.mean(z**3)          # 0 for a standard normal
+    print(f"n={n:>3}  mean={z.mean():+.3f}  var={z.var():.3f}  skew={skew:.3f}")
+```
+
+Output:
+
+```text
+n=  1  mean=-0.003  var=1.004  skew=2.019
+n=  5  mean=-0.001  var=1.002  skew=0.890
+n= 30  mean=-0.000  var=0.991  skew=0.352
+n=100  mean=-0.003  var=0.997  skew=0.193
+```
+
+The mean and variance are $0$ and $1$ for every $n$. That's just standardisation, not the CLT. The interesting column is the **skewness**, which shrinks towards $0$ as $n$ grows.
+
+## How fast does it converge?
+
+The shrinking skewness is not an accident. For i.i.d. variables, the skewness of the sum (and hence of $Z_n$) is
+
+$$
+\operatorname{skew}(Z_n) = \frac{\operatorname{skew}(X)}{\sqrt{n}},
+$$
+
+which for the exponential distribution gives $2/\sqrt{n}$:
+
+| $n$ | theory $2/\sqrt{n}$ | simulated |
+| --- | ------------------- | --------- |
+| 1   | 2.000               | 2.019     |
+| 5   | 0.894               | 0.890     |
+| 30  | 0.365               | 0.352     |
+| 100 | 0.200               | 0.193     |
+
+So the "$n \geq 30$" rule of thumb is not a law of nature. At $n = 30$ an exponential mean still has noticeable skew. A more skewed distribution needs a larger $n$; a symmetric one needs much less. The Berry–Esseen theorem makes this precise: the worst-case gap between the CDF of $Z_n$ and the normal CDF is bounded by a constant times $\mathbb{E}|X-\mu|^3 / (\sigma^3 \sqrt{n})$.
+
+<Callout title="Practical consequence">
+  A normal-approximation confidence interval for the mean of heavily skewed data (incomes, latencies,
+  house prices) can have noticeably worse coverage than advertised at moderate sample sizes. Checking
+  the skewness, or using a bootstrap, is cheap insurance.
+</Callout>
+
+## When the CLT fails
+
+The finite-variance assumption matters. For the standard Cauchy distribution the mean and variance do not exist, and the sample mean $\bar{X}_n$ has _exactly the same_ Cauchy distribution as a single observation, for every $n$. Averaging doesn't help at all.
+
+## Summary
+
+- The CLT is about the **distribution of the standardised mean**, not of the data.
+- Convergence speed depends on the shape of the original distribution; skewness decays like $1/\sqrt{n}$.
+- Finite variance is essential. Without it, the theorem simply doesn't apply.

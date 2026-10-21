@@ -1,0 +1,139 @@
+{/*
+  Write-up for the Hyderabad House Price Prediction project.
+  - Plain Markdown works everywhere: ## headings, lists, **bold**, tables, `code`.
+  - <Placeholder>...</Placeholder> marks missing facts. Replace each with real values.
+  - To add a plot: save it to public/images/house/<name>.png and replace a
+    <FigurePlaceholder .../> with <Figure src="/images/house/<name>.png" alt="..." width={1200} height={700} />.
+  - Comments like this one (inside curly braces) are not shown on the site.
+*/}
+
+## Overview
+
+The goal of this project is to predict the listed price of residential properties in Hyderabad from the attributes in a listing (size, configuration, locality and similar fields). It covers the full workflow, from collecting raw listings to deploying a model, with most of the effort going into the parts that usually decide whether a model can be trusted: data quality, feature design and evaluation.
+
+<Metrics
+  items={[
+    { label: "Listings", value: "[ADD NUMBER OF LISTINGS]" },
+    { label: "Localities", value: "[ADD NUMBER OF LOCALITIES]" },
+    { label: "Test RMSE", value: "[ADD FINAL MODEL RMSE]" },
+    { label: "Test R²", value: "[ADD FINAL MODEL R²]" },
+  ]}
+/>
+
+## Motivation
+
+<Placeholder>ADD YOUR MOTIVATION: why this city, why this problem, what you wanted to practise</Placeholder>
+
+Real-estate listings are a good test of an end-to-end workflow because the data is genuinely messy: prices and areas are entered inconsistently, the same property is often posted more than once, and location (one of the strongest signals) is a high-cardinality categorical variable.
+
+## Dataset
+
+The data was collected by web-scraping public housing listings.
+
+| Item            | Value                                               |
+| --------------- | --------------------------------------------------- |
+| Source          | <Placeholder>ADD SOURCE WEBSITE(S)</Placeholder>    |
+| Collected       | <Placeholder>ADD SCRAPE DATE / PERIOD</Placeholder> |
+| Raw rows        | <Placeholder>ADD RAW ROW COUNT</Placeholder>        |
+| Rows after cleaning | <Placeholder>ADD CLEAN ROW COUNT</Placeholder>  |
+| Target          | <Placeholder>ADD TARGET, e.g. price or log(price)</Placeholder> |
+
+Key fields: <Placeholder>ADD LIST OF FEATURES USED</Placeholder>
+
+## Methodology
+
+<Pipeline
+  steps={[
+    "Scrape listings",
+    "Clean & parse",
+    "EDA",
+    "Feature engineering",
+    "Group-aware split",
+    "Train models",
+    "Evaluate",
+    "Deploy",
+  ]}
+  caption="Overall workflow."
+/>
+
+### Data cleaning
+
+<Placeholder>ADD HOW RAW FIELDS WERE PARSED AND NORMALISED (price, area, configuration, etc.)</Placeholder>
+
+### Missing values
+
+Before choosing an imputation strategy, I looked at _how_ values were missing, not just how many. If a field is missing more often for certain localities or property types, dropping those rows biases the dataset, and a naive imputation hides the pattern.
+
+<Placeholder>ADD MISSING-VALUE FINDINGS AND THE STRATEGY USED PER COLUMN</Placeholder>
+
+<FigurePlaceholder label="ADD MISSING-VALUE PLOT" caption="Share of missing values per column." />
+
+### Outliers
+
+Some extreme values are data-entry errors (a wrong unit, an extra zero); others are real luxury properties. The two need different treatment, so outliers were examined rather than clipped automatically.
+
+<Placeholder>ADD OUTLIER METHOD AND THRESHOLDS</Placeholder>
+
+### Duplicate detection
+
+The same property frequently appears multiple times: reposted, or listed by several agents. Exact-match deduplication catches only some of these.
+
+<Placeholder>ADD DUPLICATE-DETECTION CRITERIA AND HOW MANY DUPLICATES WERE FOUND</Placeholder>
+
+### Exploratory data analysis
+
+<FigurePlaceholder label="ADD PRICE DISTRIBUTION PLOT" caption="Distribution of the target." />
+
+<Placeholder>ADD 2–4 KEY EDA FINDINGS</Placeholder>
+
+## Technical Details
+
+### Locality features
+
+Location carries much of the signal in house prices, but `locality` has many distinct values, and many of them have only a few listings.
+
+<Placeholder>ADD HOW LOCALITY WAS ENCODED (and how leakage was avoided if target-based encoding was used)</Placeholder>
+
+### Train/test splitting by property group
+
+A random row-level split is misleading here. If near-identical listings of the same property land in both the training and test sets, the model is effectively tested on data it has already seen, and the test score overstates real performance. Splitting by **property group** keeps every listing of a property on the same side of the split, so the test set measures generalisation to properties the model has never seen.
+
+<Callout title="Why this matters">
+  Leakage of this kind doesn't cause an error. It produces a better-looking number. The only defence is
+  to define the split around how the model will actually be used.
+</Callout>
+
+<Placeholder>ADD HOW PROPERTY GROUPS WERE DEFINED</Placeholder>
+
+### Models
+
+| Model                                          | RMSE                                     | MAE                                     | R²                                     |
+| ---------------------------------------------- | ---------------------------------------- | --------------------------------------- | -------------------------------------- |
+| Baseline <Placeholder>ADD BASELINE</Placeholder> | <Placeholder>ADD</Placeholder>         | <Placeholder>ADD</Placeholder>          | <Placeholder>ADD</Placeholder>         |
+| <Placeholder>ADD MODEL</Placeholder>           | <Placeholder>ADD</Placeholder>           | <Placeholder>ADD</Placeholder>          | <Placeholder>ADD</Placeholder>         |
+| <Placeholder>ADD MODEL</Placeholder>           | <Placeholder>ADD</Placeholder>           | <Placeholder>ADD</Placeholder>          | <Placeholder>ADD</Placeholder>         |
+
+## Results
+
+<Placeholder>ADD FINAL RESULTS SUMMARY ONCE AVAILABLE</Placeholder>
+
+<FigurePlaceholder label="ADD PREDICTED VS ACTUAL PLOT" caption="Predicted vs. actual prices on the held-out test set." />
+
+<FigurePlaceholder label="ADD RESIDUAL PLOT" caption="Residuals, to check for systematic error across price ranges." />
+
+### Deployment
+
+<Placeholder>ADD DEPLOYMENT DETAILS (framework, hosting, demo URL)</Placeholder>
+
+## What I learned
+
+{/* Write 3–5 honest, specific lessons. Specific beats impressive. */}
+
+- <Placeholder>ADD LESSON</Placeholder>
+- <Placeholder>ADD LESSON</Placeholder>
+- <Placeholder>ADD LESSON</Placeholder>
+
+## Future Improvements
+
+- <Placeholder>ADD IMPROVEMENT</Placeholder>
+- <Placeholder>ADD IMPROVEMENT</Placeholder>
